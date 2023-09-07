@@ -1,0 +1,19 @@
+.button-container {
+  height: 45px;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #FFF;
+  box-shadow: 0 0 0 0;
+  border: 0 none;
+  border-radius: 5px;
+  outline: 0;
+  text-align: center;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  opacity: 1;
+}
+
+.button-container:hover {
+  opacity: 0.8;
+}
