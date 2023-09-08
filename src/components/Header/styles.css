@@ -3,11 +3,13 @@
   align-items: center;
   padding: 20px 30px;
   gap: 10px;
+  height: 50px;
 }
 
 .header-container > img {
   width: 170px;
   height: 50px;
+  margin-left: -15px;
 }
 
 .header-search {
