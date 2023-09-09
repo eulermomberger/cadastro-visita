@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { collection, getDocs, Timestamp } from 'firebase/firestore/lite';
+import { collection, getDocs, orderBy, query, Timestamp } from 'firebase/firestore/lite';
 
 import { firestore } from './firebase';
 
@@ -10,8 +10,8 @@ function App() {
   const [visitors, setVisitors] = useState([]);
 
   const fetchVisitors = async () => {
-    const visitorsCollection = collection(firestore, 'visitors');
-    const visitorSnapshot = await getDocs(visitorsCollection);
+    const q = query(collection(firestore, 'visitors'), orderBy('updated_at', 'desc'));
+    const visitorSnapshot = await getDocs(q);
     const visitorList = visitorSnapshot.docs.map((doc) => ({ ...doc.data(), uuid: doc.id }));
     setVisitors(visitorList);
   };
@@ -22,7 +22,9 @@ function App() {
 
   return (
     <div>
-      <Header />
+      <Header
+        setVisitors={setVisitors}
+      />
 
       <VisitorsList visitors={visitors}/>
     </div>
