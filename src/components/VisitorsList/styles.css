@@ -9,6 +9,14 @@
   height: calc(100vh - 150px);
 }
 
+.list-empty {
+  color: #FFF;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 100px;
+}
+
 .list-container::-webkit-scrollbar {
   width: 10px;
 }

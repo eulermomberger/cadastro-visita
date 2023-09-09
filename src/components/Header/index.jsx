@@ -3,7 +3,7 @@ import './styles.css';
 import { Button } from '../Button';
 import { SearchInput } from '../SearchInput';
 
-export function Header() {
+export function Header({ setVisitors }) {
   return (
     <div className='header-container'>
       <img
@@ -12,7 +12,9 @@ export function Header() {
       />
 
       <div className='header-search'>
-        <SearchInput/>
+        <SearchInput
+          setVisitors={setVisitors}
+        />
       </div>
 
       <Button
