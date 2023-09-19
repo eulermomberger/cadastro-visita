@@ -64,12 +64,10 @@ const Popup = ({  isOpen,onClose, children, title }) => {
         const isFormValid = Object.values(inputValidity).every((valid) => valid);
     
         if (isFormValid) {
-          // Realize a ação desejada (por exemplo, salvar os dados)
           // ...
           // Após a ação bem-sucedida, feche o popup
           onClose();
         } else {
-          // Se algum campo obrigatório não for válido, defina o estado de erro de validação como true
           alert('Por favor, preencha todos os campos obrigatórios!');        }
       };
   return (
@@ -217,15 +215,15 @@ const Popup = ({  isOpen,onClose, children, title }) => {
             <input
               type="text"
               placeholder="Modelo"
-              value={inputValues.inputValue10} // Corrigindo o valor aqui
-              onChange={(e) => handleInputChange(e, 'inputValue10')} // Corrigindo o nome aqui
+              value={inputValues.inputValue10} 
+              onChange={(e) => handleInputChange(e, 'inputValue10')}
               style={{ width: '266.66px' }}
             />
             <input
               type="text"
               placeholder="Cor"
-              value={inputValues.inputValue11} // Adicionando um novo campo
-              onChange={(e) => handleInputChange(e, 'inputValue11')} // Adicionando um novo nome
+              value={inputValues.inputValue11} 
+              onChange={(e) => handleInputChange(e, 'inputValue11')} 
               style={{ width: '266.66px' }}
             />
           </div>
