@@ -1,9 +1,20 @@
+import React, { useState } from 'react';
 import './styles.css';
-
-import { Button } from '../Button';
 import { SearchInput } from '../SearchInput';
+import { Button } from '../Button';
+import Popup from '../Modal'; 
 
 export function Header({ setVisitors }) {
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const openPopup = () => {
+    setIsPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
+
   return (
     <div className='header-container'>
       <img
@@ -12,14 +23,19 @@ export function Header({ setVisitors }) {
       />
 
       <div className='header-search'>
-        <SearchInput
-          setVisitors={setVisitors}
-        />
+        <SearchInput setVisitors={setVisitors} />
       </div>
 
-      <Button
-        title='Cadastrar novo visitante'
-      />
+      <div className="popup-button-container">
+        <Button
+          title='Cadastrar novo visitante'
+          backgroundColor='#6933FF'
+          onClick={openPopup}
+        />
+        <Popup isOpen={isPopupOpen} onClose={closePopup}  title='Cadastrar novo visitante'>
+       
+      </Popup>
+      </div>
     </div>
   );
 }

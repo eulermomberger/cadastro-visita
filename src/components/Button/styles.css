@@ -12,6 +12,7 @@
   cursor: pointer;
   transition: opacity 0.3s ease;
   opacity: 1;
+  min-width: 150px;
 }
 
 .button-container:hover {
