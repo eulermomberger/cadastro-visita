@@ -1,18 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
+
 import './styles.css';
+
 import { SearchInput } from '../SearchInput';
 import { Button } from '../Button';
-import Popup from '../Modal'; 
 
-export function Header({ setVisitors }) {
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-  const openPopup = () => {
-    setIsPopupOpen(true);
-  };
-
-  const closePopup = () => {
-    setIsPopupOpen(false);
+export function Header({ setVisitors, openModal, setModalTitle }) {
+  const handleOpenModal = () => {
+    setModalTitle('Cadastrar novo visitante');
+    openModal();
   };
 
   return (
@@ -30,11 +26,8 @@ export function Header({ setVisitors }) {
         <Button
           title='Cadastrar novo visitante'
           backgroundColor='#6933FF'
-          onClick={openPopup}
+          onClick={handleOpenModal}
         />
-        <Popup isOpen={isPopupOpen} onClose={closePopup}  title='Cadastrar novo visitante'>
-       
-      </Popup>
       </div>
     </div>
   );

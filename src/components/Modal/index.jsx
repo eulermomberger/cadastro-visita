@@ -9,7 +9,7 @@ import { firestore } from '../../firebase';
 
 import './styles.css';
 
-const Popup = ({
+export const Modal = ({
   isOpen,
   onClose,
   title,
@@ -236,6 +236,3 @@ const Popup = ({
     </div>
   );
 }
-
-
-export default Popup;
