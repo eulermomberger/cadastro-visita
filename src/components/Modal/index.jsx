@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore/lite';
 
 import { Button } from '../Button';
 
 import { initialInputValidity, initialInputValues } from '../../helpers/initialStates';
+import { firestore } from '../../firebase';
 
 import './styles.css';
 
-const Popup = ({ isOpen, onClose, title }) => {
+const Popup = ({
+  isOpen,
+  onClose,
+  title,
+  visitorUuid = null,
+}) => {
   const [inputValues, setInputValues] = useState(initialInputValues);
   const [inputValidity, setInputValidity] = useState(initialInputValidity);
 
@@ -20,12 +27,12 @@ const Popup = ({ isOpen, onClose, title }) => {
     setInputValues({ ...inputValues, hasCar: !inputValues.hasCar })
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const inputValids = {
       ...inputValues,
       inputName: inputValues.inputName.length > 0,
       inputRg: inputValues.inputRg.length === 10,
-      inputCpf: inputValues.inputCpf.length === 11,
+      inputCpf: inputValues.inputCpf.length === 14,
       inputPhoneNumber: inputValues.inputPhoneNumber.length === 15,
     };
 
@@ -35,7 +42,24 @@ const Popup = ({ isOpen, onClose, title }) => {
     const isFormValid = Object.values(inputValids).every((valid) => valid);
 
     if (isFormValid) {
-      // ...
+      // Se não possuir o uuid do visitante, criar um novo
+      if (!visitorUuid) {
+        await addDoc(collection(firestore, 'visitors'), {
+          name: inputValues.inputName,
+          rg: String(inputValues.inputRg),
+          cpf: String(inputValues.inputCpf),
+          phone_number: String(inputValues.inputPhoneNumber),
+          gender: inputValues.selectedGender || null,
+          resident_relationship: inputValues.selectedRelation || null,
+          permission: parseInt(inputValues.selectedPermission, 10),
+          hasCar: inputValues.hasCar,
+          license_plate: inputValues.hasCar ? inputValues.inputLicensePlate : null,
+          car_color: inputValues.hasCar ? inputValues.inputCarColor : null,
+          car_model: inputValues.hasCar ? inputValues.inputCarModel : null,
+          updated_at: serverTimestamp(),
+        });
+      }
+
       // Após a ação bem-sucedida, feche o popup
       onClose();
     } else {
@@ -181,7 +205,7 @@ const Popup = ({ isOpen, onClose, title }) => {
                     type="text"
                     placeholder="Placa"
                     value={inputValues.inputLicensePlate}
-                    onChange={(e) => handleInputChange(e, 'selectedPermission')}
+                    onChange={(e) => handleInputChange(e, 'inputLicensePlate')}
                   />
                   <input
                     type="text"
