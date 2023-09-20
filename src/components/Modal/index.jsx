@@ -1,37 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
 
 import { Button } from '../Button';
 
+import { initialInputValidity, initialInputValues } from '../../helpers/initialStates';
+
 import './styles.css';
 
-const Popup = ({ isOpen, onClose, children, title }) => {
-  const [inputValues, setInputValues] = useState({
-    inputName: '',
-    inputRg: '',
-    inputCpf: '',
-    inputPhoneNumber: '',
-    selectedGender: '',
-    selectedRelation: '',
-    selectedPermission: '',
-    hasCar: false,
-    inputLicensePlate: '',
-    inputCarColor: '',
-    inputCarModel: '',
-  });
-
-  const [inputValidity, setInputValidity] = useState({
-    inputName: true,
-    inputRg: true,
-    inputCpf: true,
-    inputPhoneNumber: true,
-    selectedGender: true,
-    selectedRelation: true,
-    selectedPermission: true,
-    inputLicensePlate: true,
-    inputCarColor: true,
-    inputCarModel: true,
-  });
+const Popup = ({ isOpen, onClose, title }) => {
+  const [inputValues, setInputValues] = useState(initialInputValues);
+  const [inputValidity, setInputValidity] = useState(initialInputValidity);
 
   const handleInputChange = (event, inputName) => {
     setInputValues({ ...inputValues, [inputName]: event.target.value });
@@ -43,8 +21,18 @@ const Popup = ({ isOpen, onClose, children, title }) => {
   };
 
   const handleSave = () => {
+    const inputValids = {
+      ...inputValues,
+      inputName: inputValues.inputName.length > 0,
+      inputRg: inputValues.inputRg.length === 10,
+      inputCpf: inputValues.inputCpf.length === 11,
+      inputPhoneNumber: inputValues.inputPhoneNumber.length === 15,
+    };
+
+    setInputValidity(inputValids);
+
     // Verificar se todos os campos obrigatórios são válidos
-    const isFormValid = Object.values(inputValidity).every((valid) => valid);
+    const isFormValid = Object.values(inputValids).every((valid) => valid);
 
     if (isFormValid) {
       // ...
@@ -54,6 +42,11 @@ const Popup = ({ isOpen, onClose, children, title }) => {
       alert('Por favor, preencha todos os campos obrigatórios!');
     }
   };
+
+  useEffect(() => {
+    setInputValues(initialInputValues);
+    setInputValidity(initialInputValidity);
+  }, [isOpen]);
 
   return (
     <div>
@@ -76,7 +69,7 @@ const Popup = ({ isOpen, onClose, children, title }) => {
                   placeholder="Nome"
                   value={inputValues.inputName}
                   onChange={(e) => handleInputChange(e, 'inputName')}
-                  className={!inputValidity.inputName && 'invalid-input'}
+                  className={inputValidity.inputName ? '' : 'invalid-input'}
                 />
               </div>
 
@@ -86,12 +79,12 @@ const Popup = ({ isOpen, onClose, children, title }) => {
                   maskChar=""
                   value={inputValues.inputRg}
                   onChange={(e) => handleInputChange(e, 'inputRg')}
-                  className={!inputValidity.inputRg && 'invalid-input'}
                 >
                   {() => (
                     <input
                       type="text"
                       placeholder="RG"
+                      className={inputValidity.inputRg ? '' : 'invalid-input'}
                     />
                   )}
                 </InputMask>
@@ -101,12 +94,12 @@ const Popup = ({ isOpen, onClose, children, title }) => {
                   maskChar=""
                   value={inputValues.inputCpf}
                   onChange={(e) => handleInputChange(e, 'inputCpf')}
-                  className={!inputValidity.inputCpf && 'invalid-input'}
                 >
                   {() => (
                     <input
                       type="text"
                       placeholder="CPF"
+                      className={inputValidity.inputCpf ? '' : 'invalid-input'}
                     />
                   )}
                 </InputMask>
@@ -118,12 +111,12 @@ const Popup = ({ isOpen, onClose, children, title }) => {
                   maskChar=""
                   value={inputValues.inputPhoneNumber}
                   onChange={(e) => handleInputChange(e, 'inputPhoneNumber')}
-                  className={!inputValidity.inputPhoneNumber && 'invalid-input'}
                 >
                   {() => (
                     <input
                       type="text"
                       placeholder="Telefone"
+                      className={inputValidity.inputPhoneNumber ? '' : 'invalid-input'}
                     />
                   )}
                 </InputMask>
