@@ -46,12 +46,12 @@
 .list-icon {
   width: 36px;
   padding-right: 30px;
+  display: flex;
 }
 
 .list-name {
   flex: 3 0;
   padding-right: 30px;
-  cursor: pointer;
 }
 
 .list-rg {
@@ -76,4 +76,8 @@
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+}
+
+.list-visitor-row > .list-name {
+  cursor: pointer;
 }
