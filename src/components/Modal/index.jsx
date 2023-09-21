@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
-import { addDoc, collection, doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore/lite';
+import { addDoc, collection, deleteDoc, doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore/lite';
 
 import { Button } from '../Button';
+import { AlertConfirm } from '../AlertConfirm';
 
 import { initialInputValidity, initialInputValues } from '../../helpers/initialStates';
 import { firestore } from '../../firebase';
@@ -19,6 +20,7 @@ export const Modal = ({
   const [inputValues, setInputValues] = useState(initialInputValues);
   const [inputValidity, setInputValidity] = useState(initialInputValidity);
   const [visitor, setVisitor] = useState(null);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const handleInputChange = (event, inputName) => {
     setInputValues({ ...inputValues, [inputName]: event.target.value });
@@ -85,6 +87,27 @@ export const Modal = ({
     } else {
       alert('Por favor, preencha todos os campos obrigatórios!');
     }
+  };
+
+  const handleDelete = () => {
+    setIsAlertOpen(true);
+  };
+
+  const handleCancelDelete = () => {
+    setIsAlertOpen(false);
+  };
+
+  const handleConfirmDelete = async () => {
+    await deleteDoc(doc(firestore, 'visitors', visitorUuid));
+
+    setVisitors((oldState) => {
+      const visitors = oldState.filter((visitor) => visitor.uuid !== visitorUuid);
+
+      return visitors;
+    });
+
+    setIsAlertOpen(false);
+    onClose();
   };
 
   const fetchVisitor = async () => {
@@ -271,6 +294,13 @@ export const Modal = ({
             </div>
 
             <div className='popup-footer'>
+              {visitorUuid && (
+                <Button
+                  onClick={handleDelete}
+                  title='Excluir'
+                  backgroundColor='#a81c15'
+                />
+              )}
               <Button
                 onClick={handleSave}
                 title='Salvar'
@@ -280,6 +310,14 @@ export const Modal = ({
           </div>
         </div>
       )}
+
+      <AlertConfirm
+        isOpen={isAlertOpen}
+        onCancel={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+        title='Excluir visitante'
+        description={`Você realmente deseja excluir o visitante ${visitor?.name}?`}
+      />
     </div>
   );
 }
