@@ -11,8 +11,11 @@ function App() {
   const [visitors, setVisitors] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
+  const [visitorUuid, setVisitorUuid] = useState(null);
 
-  const openModal = () => {
+  const openModal = (title, uuid = null) => {
+    setModalTitle(title);
+    setVisitorUuid(uuid);
     setIsModalOpen(true);
   };
 
@@ -36,15 +39,19 @@ function App() {
       <Header
         setVisitors={setVisitors}
         openModal={openModal}
-        setModalTitle={setModalTitle}
       />
 
-      <VisitorsList visitors={visitors}/>
+      <VisitorsList
+        visitors={visitors}
+        openModal={openModal}
+      />
 
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
         title={modalTitle}
+        setVisitors={setVisitors}
+        visitorUuid={visitorUuid}
       />
     </>
   );

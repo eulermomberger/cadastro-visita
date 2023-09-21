@@ -1,7 +1,7 @@
 import './styles.css';
 
 import { useEffect, useRef, useState } from 'react';
-import { collection, getDocs, query, where } from 'firebase/firestore/lite';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore/lite';
 import { MdClear, MdLoop, MdSearch } from 'react-icons/md';
 
 import { firestore } from '../../firebase';
@@ -18,11 +18,19 @@ export function SearchInput({ setVisitors }) {
     // Ao contrário realiza a consulta pelo campo 'rg'
     const queryBy = Number.isNaN(parseInt(inputText, 10)) ? 'name' : 'rg';
 
-    const q = query(
-      visitorsCollection,
-      where(queryBy, '>=', `${inputText.charAt(0).toUpperCase()}${inputText.slice(1)}`),
-      where(queryBy, '<=', `${inputText.charAt(0).toUpperCase()}${inputText.slice(1)}\uf8ff`)
-    );
+    let q;
+    if (inputText !== '') {
+      q = query(
+        visitorsCollection,
+        where(queryBy, '>=', `${inputText.charAt(0).toUpperCase()}${inputText.slice(1)}`),
+        where(queryBy, '<=', `${inputText.charAt(0).toUpperCase()}${inputText.slice(1)}\uf8ff`),
+        orderBy('name'),
+        orderBy('updated_at', 'desc')
+      );
+    } else {
+      q = query(visitorsCollection, orderBy('updated_at', 'desc'));
+    }
+
     const visitorSnapshot = await getDocs(q);
     const visitorList = visitorSnapshot.docs.map((doc) => ({ ...doc.data(), uuid: doc.id }));
     setVisitors(visitorList);

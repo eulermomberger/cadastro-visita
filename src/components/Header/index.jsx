@@ -5,10 +5,9 @@ import './styles.css';
 import { SearchInput } from '../SearchInput';
 import { Button } from '../Button';
 
-export function Header({ setVisitors, openModal, setModalTitle }) {
+export function Header({ setVisitors, openModal }) {
   const handleOpenModal = () => {
-    setModalTitle('Cadastrar novo visitante');
-    openModal();
+    openModal('Cadastrar novo visitante');
   };
 
   return (
