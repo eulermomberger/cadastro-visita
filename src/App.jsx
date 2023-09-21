@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore/lite';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { firestore } from './firebase';
 
@@ -52,6 +54,19 @@ function App() {
         title={modalTitle}
         setVisitors={setVisitors}
         visitorUuid={visitorUuid}
+      />
+
+      <ToastContainer
+        position='bottom-right'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='colored'
       />
     </>
   );

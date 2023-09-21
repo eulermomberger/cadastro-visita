@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
 import { addDoc, collection, deleteDoc, doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore/lite';
+import { toast } from 'react-toastify';
 
 import { Button } from '../Button';
 import { AlertConfirm } from '../AlertConfirm';
@@ -70,6 +71,8 @@ export const Modal = ({
         const docSnap = await getDoc(docRef);
 
         setVisitors((oldState) => [{ ...docSnap.data(), uuid: docSnap.id }, ...oldState]);
+
+        toast.success('Visitante cadastrado!');
       } else { // Se possuir, atualizar
         const docRef = doc(firestore, 'visitors', visitorUuid);
         await updateDoc(docRef, getVisitorValues());
@@ -80,6 +83,8 @@ export const Modal = ({
 
           return [{ ...docSnap.data(), uuid: docSnap.id }, ...visitors];
         });
+
+        toast.success('Visitante atualizado!');
       }
 
       // Após a ação bem-sucedida, feche o popup
@@ -108,6 +113,8 @@ export const Modal = ({
 
     setIsAlertOpen(false);
     onClose();
+
+    toast.success('Visitante excluído!');
   };
 
   const fetchVisitor = async () => {
