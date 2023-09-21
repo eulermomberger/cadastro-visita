@@ -2,7 +2,11 @@ import './styles.css';
 
 import { MdAccountCircle } from 'react-icons/md';
 
-export function VisitorsList({ visitors }) {
+export function VisitorsList({ visitors, openModal }) {
+  const handleOpenUpdateModal = (uuid) => {
+    openModal('Atualizar visitante', uuid);
+  };
+
   if (visitors.length > 0) {
     return (
       <div className='list-container'>
@@ -21,7 +25,10 @@ export function VisitorsList({ visitors }) {
                   size={36}
                 />
               </div>
-              <div className='list-name'>
+              <div
+                className='list-name'
+                onClick={() => handleOpenUpdateModal(visitor.uuid)}
+              >
                 {visitor.name}
               </div>
               <div className='list-rg'>

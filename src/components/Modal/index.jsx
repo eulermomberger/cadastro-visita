@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore/lite';
+import { addDoc, collection, doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore/lite';
 
 import { Button } from '../Button';
 
@@ -9,14 +9,16 @@ import { firestore } from '../../firebase';
 
 import './styles.css';
 
-const Popup = ({
+export const Modal = ({
   isOpen,
   onClose,
   title,
+  setVisitors,
   visitorUuid = null,
 }) => {
   const [inputValues, setInputValues] = useState(initialInputValues);
   const [inputValidity, setInputValidity] = useState(initialInputValidity);
+  const [visitor, setVisitor] = useState(null);
 
   const handleInputChange = (event, inputName) => {
     setInputValues({ ...inputValues, [inputName]: event.target.value });
@@ -27,13 +29,31 @@ const Popup = ({
     setInputValues({ ...inputValues, hasCar: !inputValues.hasCar })
   };
 
+  const getVisitorValues = () => ({
+    name: inputValues.inputName,
+    rg: String(inputValues.inputRg),
+    cpf: String(inputValues.inputCpf),
+    phone_number: String(inputValues.inputPhoneNumber),
+    gender: inputValues.selectedGender || null,
+    resident_relationship: inputValues.selectedRelation || null,
+    permission: parseInt(inputValues.selectedPermission, 10),
+    has_car: inputValues.hasCar,
+    license_plate: inputValues.hasCar ? inputValues.inputLicensePlate : null,
+    car_color: inputValues.hasCar ? inputValues.inputCarColor : null,
+    car_model: inputValues.hasCar ? inputValues.inputCarModel : null,
+    updated_at: serverTimestamp(),
+  });
+
   const handleSave = async () => {
     const inputValids = {
-      ...inputValues,
+      ...inputValidity,
       inputName: inputValues.inputName.length > 0,
-      inputRg: inputValues.inputRg.length === 10,
+      inputRg: inputValues.inputRg.length >= 7 && inputValues.inputRg.length <= 11,
       inputCpf: inputValues.inputCpf.length === 14,
       inputPhoneNumber: inputValues.inputPhoneNumber.length === 15,
+      selectedGender: !!inputValues.selectedGender,
+      selectedRelation: !!inputValues.selectedRelation,
+      selectedPermission: inputValues.selectedPermission !== null && inputValues.selectedPermission !== '',
     };
 
     setInputValidity(inputValids);
@@ -44,19 +64,19 @@ const Popup = ({
     if (isFormValid) {
       // Se não possuir o uuid do visitante, criar um novo
       if (!visitorUuid) {
-        await addDoc(collection(firestore, 'visitors'), {
-          name: inputValues.inputName,
-          rg: String(inputValues.inputRg),
-          cpf: String(inputValues.inputCpf),
-          phone_number: String(inputValues.inputPhoneNumber),
-          gender: inputValues.selectedGender || null,
-          resident_relationship: inputValues.selectedRelation || null,
-          permission: parseInt(inputValues.selectedPermission, 10),
-          hasCar: inputValues.hasCar,
-          license_plate: inputValues.hasCar ? inputValues.inputLicensePlate : null,
-          car_color: inputValues.hasCar ? inputValues.inputCarColor : null,
-          car_model: inputValues.hasCar ? inputValues.inputCarModel : null,
-          updated_at: serverTimestamp(),
+        const docRef = await addDoc(collection(firestore, 'visitors'), getVisitorValues());
+        const docSnap = await getDoc(docRef);
+
+        setVisitors((oldState) => [{ ...docSnap.data(), uuid: docSnap.id }, ...oldState]);
+      } else { // Se possuir, atualizar
+        const docRef = doc(firestore, 'visitors', visitorUuid);
+        await updateDoc(docRef, getVisitorValues());
+        const docSnap = await getDoc(docRef);
+
+        setVisitors((oldState) => {
+          const visitors = oldState.filter((visitor) => visitor.uuid !== visitorUuid);
+
+          return [{ ...docSnap.data(), uuid: docSnap.id }, ...visitors];
         });
       }
 
@@ -67,9 +87,36 @@ const Popup = ({
     }
   };
 
+  const fetchVisitor = async () => {
+    const docRef = doc(firestore, 'visitors', visitorUuid);
+    const docSnap = await getDoc(docRef);
+
+    const visitorValues = docSnap.data();
+    setVisitor({ ...visitorValues, uuid: docSnap.id });
+
+    setInputValues({
+      inputName: visitorValues.name,
+      inputRg: visitorValues.rg,
+      inputCpf: visitorValues.cpf,
+      inputPhoneNumber: visitorValues.phone_number,
+      selectedGender: visitorValues.gender,
+      selectedRelation: visitorValues.resident_relationship,
+      selectedPermission: visitorValues.permission,
+      hasCar: visitorValues.has_car,
+      inputLicensePlate: visitorValues.license_plate,
+      inputCarColor: visitorValues.car_color,
+      inputCarModel: visitorValues.car_model,
+    });
+  };
+
   useEffect(() => {
     setInputValues(initialInputValues);
     setInputValidity(initialInputValidity);
+    setVisitor(null);
+
+    if (isOpen && visitorUuid) {
+      fetchVisitor();
+    }
   }, [isOpen]);
 
   return (
@@ -99,7 +146,7 @@ const Popup = ({
 
               <div className="row">
                 <InputMask
-                  mask="9999999999"
+                  mask="99999999999"
                   maskChar=""
                   value={inputValues.inputRg}
                   onChange={(e) => handleInputChange(e, 'inputRg')}
@@ -236,6 +283,3 @@ const Popup = ({
     </div>
   );
 }
-
-
-export default Popup;

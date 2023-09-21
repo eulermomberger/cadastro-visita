@@ -51,6 +51,7 @@
 .list-name {
   flex: 3 0;
   padding-right: 30px;
+  cursor: pointer;
 }
 
 .list-rg {
