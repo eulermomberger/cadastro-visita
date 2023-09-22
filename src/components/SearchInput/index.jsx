@@ -24,7 +24,7 @@ export function SearchInput({ setVisitors }) {
         visitorsCollection,
         where(queryBy, '>=', `${inputText.charAt(0).toUpperCase()}${inputText.slice(1)}`),
         where(queryBy, '<=', `${inputText.charAt(0).toUpperCase()}${inputText.slice(1)}\uf8ff`),
-        orderBy('name'),
+        orderBy(queryBy),
         orderBy('updated_at', 'desc')
       );
     } else {
