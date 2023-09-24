@@ -1,0 +1,89 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VisitorsList component Should renders correctly with a visitor 1`] = `
+<div
+  className="list-container"
+>
+  <div
+    className="list-header"
+  >
+    <span
+      className="list-icon"
+    />
+    <span
+      className="list-name"
+    >
+      Nome
+    </span>
+    <span
+      className="list-rg"
+    >
+      RG
+    </span>
+    <span
+      className="list-date"
+    >
+      Data de modificação
+    </span>
+  </div>
+  <div
+    className="list-body"
+  >
+    <div
+      className="list-visitor-row"
+    >
+      <div
+        className="list-icon"
+      >
+        <svg
+          color="#FFF"
+          fill="currentColor"
+          height={36}
+          stroke="currentColor"
+          strokeWidth="0"
+          style={
+            {
+              "color": "#FFF",
+            }
+          }
+          viewBox="0 0 24 24"
+          width={36}
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0 0h24v24H0z"
+            fill="none"
+          />
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88a9.947 9.947 0 0112.28 0C16.43 19.18 14.03 20 12 20z"
+          />
+        </svg>
+      </div>
+      <div
+        className="list-name"
+        onClick={[Function]}
+      >
+        Luis
+      </div>
+      <div
+        className="list-rg"
+      >
+        0124656565
+      </div>
+      <div
+        className="list-date"
+      >
+        24/09/2023
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`VisitorsList component Should renders correctly with no visitors 1`] = `
+<div
+  className="list-empty"
+>
+  Nenhum visitante encontrado
+</div>
+`;

@@ -171,6 +171,7 @@ export const Modal = ({
                   value={inputValues.inputName}
                   onChange={(e) => handleInputChange(e, 'inputName')}
                   className={inputValidity.inputName ? '' : 'invalid-input'}
+                  data-testid="name-input"
                 />
               </div>
 
@@ -185,6 +186,7 @@ export const Modal = ({
                     <input
                       type="text"
                       placeholder="RG"
+                      data-testid="rg-input"
                       className={inputValidity.inputRg ? '' : 'invalid-input'}
                     />
                   )}
@@ -200,6 +202,7 @@ export const Modal = ({
                     <input
                       type="text"
                       placeholder="CPF"
+                      data-testid="cpf-input"
                       className={inputValidity.inputCpf ? '' : 'invalid-input'}
                     />
                   )}
@@ -217,6 +220,7 @@ export const Modal = ({
                     <input
                       type="text"
                       placeholder="Telefone"
+                      data-testid="phone-input"
                       className={inputValidity.inputPhoneNumber ? '' : 'invalid-input'}
                     />
                   )}
@@ -225,6 +229,7 @@ export const Modal = ({
                 <select
                   value={inputValues.selectedGender}
                   onChange={(e) => handleInputChange(e, 'selectedGender')}
+                  data-testid="gender-select"
                 >
                   <option value="" disabled >
                     Gênero
@@ -239,6 +244,7 @@ export const Modal = ({
                 <select
                   value={inputValues.selectedRelation}
                   onChange={(e) => handleInputChange(e, 'selectedRelation')}
+                  data-testid="relation-select"
                 >
                   <option value="" disabled>
                     Relação com o morador
@@ -253,6 +259,7 @@ export const Modal = ({
                 <select
                   value={inputValues.selectedPermission}
                   onChange={(e) => handleInputChange(e, 'selectedPermission')}
+                  data-testid="permission-select"
                 >
                   <option value="" disabled>
                     Permissão de entrada

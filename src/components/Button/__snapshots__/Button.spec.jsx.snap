@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button component Should appear with the correct background color 1`] = `
+<button
+  className="button-container"
+  onClick={[Function]}
+  style={
+    {
+      "backgroundColor": "#064482",
+    }
+  }
+>
+  Botão
+</button>
+`;
+
+exports[`Button component Should appear with the default background color 1`] = `
+<button
+  className="button-container"
+  onClick={[Function]}
+  style={
+    {
+      "backgroundColor": "#6933FF",
+    }
+  }
+>
+  Botão
+</button>
+`;
