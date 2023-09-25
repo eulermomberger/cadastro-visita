@@ -73,7 +73,7 @@ exports[`VisitorsList component Should renders correctly with a visitor 1`] = `
       <div
         className="list-date"
       >
-        24/09/2023
+        2023-09-24T00:00:00.000Z
       </div>
     </div>
   </div>

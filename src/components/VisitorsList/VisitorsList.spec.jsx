@@ -10,7 +10,15 @@ describe('VisitorsList component', () => {
         visitors={[{
           name: 'Luis',
           rg: '0124656565',
-          updated_at: { toDate() { return new Date() } },
+          updated_at: {
+            toDate() {
+              return {
+                toLocaleDateString() {
+                  return new Date('2023-09-24').toISOString();
+                }
+              };
+            }
+          },
           uuid: 'abcd1234',
         }]}
       />

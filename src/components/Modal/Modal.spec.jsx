@@ -19,12 +19,18 @@ jest.mock('firebase/firestore/lite', () => {
     getDoc() {
       return {
         data() {
-          return { name: 'Luis', rg: '0192839382', updated_at: { toDate() { return new Date() } } }
+          return {
+            name: 'Luis',
+            rg: '0192839382',
+            updated_at: {
+              toDate() { return new Date('2023-09-24'); },
+            },
+          };
         },
         uuid: 'abcd123',
       };
     },
-    serverTimestamp() { return new Date() },
+    serverTimestamp() { return new Date('2023-09-24'); },
     updateDoc() {},
     getFirestore() {},
   };
