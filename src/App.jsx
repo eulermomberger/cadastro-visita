@@ -53,6 +53,7 @@ function App() {
         onClose={closeModal}
         title={modalTitle}
         setVisitors={setVisitors}
+        visitors={visitors}
         visitorUuid={visitorUuid}
       />
 

@@ -16,6 +16,7 @@ export const Modal = ({
   onClose,
   title,
   setVisitors,
+  visitors,
   visitorUuid = null,
 }) => {
   const [inputValues, setInputValues] = useState(initialInputValues);
@@ -47,13 +48,44 @@ export const Modal = ({
     updated_at: serverTimestamp(),
   });
 
+  const verifyFieldUniqueness = (field, value) => visitors.filter((v) => v.uuid !== visitorUuid)
+    .every((v) => v[field] !== value);
+
   const handleSave = async () => {
+    const messagesError = {
+      rg: null,
+      cpf: null,
+      phone_number: null,
+    };
+
+    if (!verifyFieldUniqueness('rg', inputValues.inputRg)) {
+      messagesError.rg = 'O RG preenchido já é utilizado por outro visitante cadastrado!';
+    }
+
+    if (!verifyFieldUniqueness('cpf', inputValues.inputCpf)) {
+      messagesError.cpf = 'O CPF preenchido já é utilizado por outro visitante cadastrado!';
+    }
+
+    if (!verifyFieldUniqueness('phone_number', inputValues.inputPhoneNumber)) {
+      messagesError.phone_number = 'O telefone preenchido já é utilizado por outro visitante cadastrado!';
+    }
+
     const inputValids = {
       ...inputValidity,
       inputName: inputValues.inputName.length > 0,
-      inputRg: inputValues.inputRg.length >= 7 && inputValues.inputRg.length <= 11,
-      inputCpf: inputValues.inputCpf.length === 14,
-      inputPhoneNumber: inputValues.inputPhoneNumber.length === 15,
+      inputRg: (
+        inputValues.inputRg.length >= 7
+        && inputValues.inputRg.length <= 11
+        && messagesError.rg === null
+      ),
+      inputCpf: (
+        inputValues.inputCpf.length === 14
+        && messagesError.cpf === null
+      ),
+      inputPhoneNumber: (
+        inputValues.inputPhoneNumber.length === 15
+        && messagesError.phone_number === null
+      ),
       selectedGender: !!inputValues.selectedGender,
       selectedRelation: !!inputValues.selectedRelation,
       selectedPermission: inputValues.selectedPermission !== null && inputValues.selectedPermission !== '',
@@ -90,7 +122,15 @@ export const Modal = ({
       // Após a ação bem-sucedida, feche o popup
       onClose();
     } else {
-      alert('Por favor, preencha todos os campos obrigatórios!');
+      let message = 'Por favor, preencha todos os campos obrigatórios!';
+
+      Object.keys(messagesError).forEach((field) => {
+        if (messagesError[field] !== null) {
+          message = messagesError[field];
+        }
+      });
+
+      toast.error(message);
     }
   };
 
