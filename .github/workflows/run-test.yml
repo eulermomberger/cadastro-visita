@@ -9,6 +9,7 @@ on:
       - master
     types:
       - opened
+      - edited
 
 jobs:
   test:

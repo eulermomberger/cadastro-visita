@@ -77,6 +77,7 @@ describe('Modal component', () => {
         isOpen
         onClose={() => {}}
         setVisitors={() => {}}
+        visitors={[]}
         title='Título modal'
       />
     );
